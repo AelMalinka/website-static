@@ -5,5 +5,5 @@
 module.exports = {
 	name: 'static',
 	port: process.env.PORT || 8080,
-	forward: 'http://' + (process.env.FORWARD !== undefined ? proces.env.FORWARD : 'localhost:' + process.env.PORT) + '/',
+	forward: 'http://' + (process.env.FORWARD !== undefined ? proces.env.FORWARD : 'localhost:') + process.env.PORT + '/',
 };
