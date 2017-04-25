@@ -6,13 +6,13 @@ window.addEvent('domready', function() {
 	const Nav = new Navigation($('menu'), $('main'), 'default');
 
 	Nav.addEvent('complete', function() {
-		const page = (window.location.pathname !== '/' ? window.location.pathname.split('/')[1] : 'default');
+		const page = (window.location.pathname !== '/' ? window.location.pathname.split('/')[1] : 'Home');
 		console.log('on page ' + Nav.pages[page].name);
 		Nav.pages[page].get();
 	});
 	$('home').addEvent('click', function() {
 		Nav.clear();
-		Nav.pages.default.get();
+		Nav.pages.Home.get();
 		history.pushState({}, '', '/');
 		return false;
 	});
