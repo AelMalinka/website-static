@@ -34,4 +34,10 @@ window.addEvent('domready', function() {
 	});
 
 	Nav.get();
+
+	const user = new User({
+		where: $('login'),
+	});
+
+	user.show();
 });
