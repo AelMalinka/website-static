@@ -2,15 +2,6 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-// 2017-04-27 AMR TODO: is it worth it?
-function BadOptions(msg) {
-	this.name = 'Bad Options';
-	this.message = msg || 'Bad Options';
-}
-
-BadOptions.prototype = Object.create(Error.prototype);
-BadOptions.prototype.constructor = BadOptions;
-
 // 2017-04-28 AMR NOTE: Login/Logout buttons
 const Login = new Element('a', {
 	html: 'Login ',
@@ -21,10 +12,10 @@ const Logout = new Element('a', {
 	html: 'Logout '
 });
 new Element('span', {
-	'class': 'glyphicon glyphicon-user'
+	'class': 'glyphicon glyphicon-user',
 }).inject(Login);
 new Element('span', {
-	'class': 'glyphicon glyphicon-user'
+	'class': 'glyphicon glyphicon-user',
 }).inject(Logout);
 
 const User = new Class({
@@ -37,7 +28,7 @@ const User = new Class({
 		this.setOptions(options);
 
 		if(this.options.where === undefined) {
-			throw new BadOptions('Please specify where');
+			throw new Error('Please specify where');
 		}
 
 		this.build();
