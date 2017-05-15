@@ -49,6 +49,12 @@ const Modal = new Class({
 		this.modal.inject($$('body')[0], 'after');
 		this.fireEvent('change');
 	},
+	hide: function() {
+		jQuery('#' + this.options.id).modal('hide');
+	},
+	show: function() {
+		jQuery('#' + this.options.id).modal('show');
+	},
 	buildHeader: function() {
 		this.header = new Element('div', {
 			'class': 'modal-header'
