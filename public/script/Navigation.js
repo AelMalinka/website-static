@@ -27,7 +27,8 @@ const Navigation = new Class({
 						history.pushState({}, self.title + ': ' + p.name, '/' + p.name);
 						return false;
 					});
-					page.inject(self.menu);
+					if(p.name != 'default')
+						page.inject(self.menu);
 					self.pages[p.name] = page;
 				});
 				self.fireEvent('complete');

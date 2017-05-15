@@ -2,8 +2,10 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
+var Nav;
+
 function page() {
-	return (window.location.pathname !== '/' ? window.location.pathname.split('/')[1] : 'Home');
+	return (window.location.pathname !== '/' ? window.location.pathname.split('/')[1] : 'default');
 }
 
 function load(where) {
@@ -16,7 +18,7 @@ window.onpopstate = function(e) {
 }
 
 window.addEvent('domready', function() {
-	const Nav = new Navigation($('menu'), $('main'), 'default');
+	Nav = new Navigation($('menu'), $('main'), 'default');
 
 	Nav.addEvent('complete', function() {
 		if(Nav.pages[page()] !== undefined) {
@@ -28,7 +30,7 @@ window.addEvent('domready', function() {
 	});
 	$('home').addEvent('click', function() {
 		Nav.clear();
-		Nav.pages.Home.get();
+		Nav.pages.default.get();
 		history.pushState({}, '', '/');
 		return false;
 	});
