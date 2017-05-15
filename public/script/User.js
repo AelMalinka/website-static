@@ -42,11 +42,7 @@ const User = new Class({
 
 		this.build();
 
-		if(Cookie.read('user') === null || Cookie.read('auth') === null) {
-			this.logged = false;
-		} else {
-			this.logged = true;
-		}
+		this.options.logout.addEvent('click', this.logout.bind(this));
 
 		this.addEvent('login', this.show.bind(this));
 		this.addEvent('logout', this.show.bind(this));
@@ -88,21 +84,57 @@ const User = new Class({
 		}).inject(this.modal.footer);
 	},
 	show: function() {
+		console.log('Logged ' + (this.logged ? 'In' : 'Out'));
+
+		this.options.where.set('html', '');
 		this.options[(this.logged ? 'logout' : 'login')].inject(this.options.where);
+
 		this.fireEvent('show');
 	},
 	login: function(e) {
 		e.stop();
-		console.log('trying to log in as ' + this.form.get('value'));
+
+		const user = this.form.get('value');
+		this.form.set('value', '');
+
+		console.log('trying to log in as ' + user);
+
+		new Request.JSON({
+			url: '/user/login',
+			data: 'user=' + user,
+			onSuccess: function(res) {
+				if(res.redirect !== undefined) {
+					document.location = res.redirect;
+				} else if(res.name !== user) {
+					this.logged = false;
+					this.fireEvent('logout');
+				} else {
+					this.user = res;
+					this.logged = true;
+					this.fireEvent('login');
+				}
+
+				this.modal.hide();
+			}.bind(this),
+			onFailure: function(e) {
+				this.logged = false;
+				this.fireEvent('logout');
+
+				this.modal.hide();
+			}.bind(this),
+		}).send();
+	},
+	logout: function(e) {
+		e.stop();
+
+		console.log('trying to logout');
 
 		new Request({
-			url: '/asdf',
-			data: 'user=' + this.form.get('value'),
+			url: '/user/logout',
+			data: 'user=' + this.user.name,
 			onSuccess: function(res) {
-				this.logged = true;
-				this.fireEvent('login');
-			}.bind(this),
-			onFailure: function(res) {
+				delete this.user;
+
 				this.logged = false;
 				this.fireEvent('logout');
 			}.bind(this),
