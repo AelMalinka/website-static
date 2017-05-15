@@ -3,26 +3,32 @@
 */
 
 const Page = new Class({
-	initialize: function(page, url, where) {
+	Implements: [Options],
+	options: {
+	},
+	initialize: function(options) {
+		this.setOptions(options);
+
 		this.md = new showdown.Converter();
-		this.name = page;
-		this.where = where;
 		this.element = new Element('a', {
-			id: page,
-			href: page,
-			html: page
+			id: this.options.page,
+			href: this.options.page,
+			html: this.options.page,
 		});
 		this.container = new Element('li');
 		this.element.inject(this.container);
-		this.url = url;
 	},
 	get: function(id) {
 		const self = this;
-		console.log('requesting ' + self.url);
+		console.log('requesting ' + self.options.url);
 		new Request({
-			url: this.url,
+			url: this.options.url,
 			onSuccess: function(res) {
-				self.where.set('html', self.md.makeHtml(res));
+				if(self.options.markdown !== undefined) {
+					self.options.markdown.set('html', res);
+				}
+
+				self.options.where.set('html', self.md.makeHtml(res));
 				self.active();
 			},
 		}).get();

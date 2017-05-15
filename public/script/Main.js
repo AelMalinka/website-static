@@ -2,15 +2,15 @@
 	Distributed under the terms of the GNU Affero General Public License v3
 */
 
-var Nav;
+var nav;
 
 function page() {
 	return (window.location.pathname !== '/' ? window.location.pathname.split('/')[1] : 'default');
 }
 
 function load(where) {
-	Nav.clear();
-	Nav.pages[where].get();
+	nav.clear();
+	nav.pages[where].get();
 }
 
 window.onpopstate = function(e) {
@@ -18,27 +18,46 @@ window.onpopstate = function(e) {
 }
 
 window.addEvent('domready', function() {
-	Nav = new Navigation($('menu'), $('main'), 'default');
-
-	Nav.addEvent('complete', function() {
-		if(Nav.pages[page()] !== undefined) {
-			console.log('on page ' + Nav.pages[page()].name);
-			Nav.pages[page()].get();
-		} else {
-			$('main').set('html', 'Page not found');
+	nav = new Navigation({
+		menu: $('menu'),
+		main: $('main'),
+		site: 'default',
+		title: 'Entropy Development',
+		markdown: $('markdown'),
+		onComplete: function() {
+			if(nav.pages[page()] !== undefined) {
+				console.log('on page ' + page());
+				nav.pages[page()].get();
+			} else {
+				$('main').set('html', 'Page not found');
+			}
 		}
 	});
 	$('home').addEvent('click', function() {
-		Nav.clear();
-		Nav.pages.default.get();
+		nav.clear();
+		nav.pages.default.get();
 		history.pushState({}, '', '/');
 		return false;
 	});
 
-	Nav.get();
+	nav.get();
+
+	const edit = new Edit({
+		where: $('main'),
+		container: $('edit-container'),
+		button: $('edit'),
+		page: page,
+		markdown: $('markdown'),
+	});
 
 	const user = new User({
 		where: $('login'),
+		onLogin: function() {
+			edit.enable();
+		},
+		onLogout: function() {
+			edit.disable();
+		},
 	});
 
 	user.show();
