@@ -46,8 +46,10 @@ window.addEvent('domready', function() {
 		where: $('main'),
 		container: $('edit-container'),
 		button: $('edit'),
+		site: 'default',
 		page: page,
 		markdown: $('markdown'),
+		height: 20,
 	});
 
 	const user = new User({
