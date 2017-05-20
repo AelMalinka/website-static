@@ -19,18 +19,17 @@ const Page = new Class({
 		this.element.inject(this.container);
 	},
 	get: function(id) {
-		const self = this;
-		console.log('requesting ' + self.options.url);
+		console.log('requesting ' + this.options.url);
 		new Request({
 			url: this.options.url,
 			onSuccess: function(res) {
-				if(self.options.markdown !== undefined) {
-					self.options.markdown.set('html', res);
+				if(this.options.markdown !== undefined) {
+					this.options.markdown.set('html', res);
 				}
 
-				self.options.where.set('html', self.md.makeHtml(res));
-				self.active();
-			},
+				this.options.where.set('html', this.md.makeHtml(res));
+				this.active();
+			}.bind(this),
 		}).get();
 	},
 	clear: function() {
