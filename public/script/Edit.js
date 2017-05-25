@@ -13,6 +13,7 @@ const Edit = new Class({
 			throw new Error('Please specify where and a container');
 		}
 
+		this.enabled = false;
 		this.shown = false;
 		this.md = new showdown.Converter();
 
@@ -25,40 +26,33 @@ const Edit = new Class({
 			'class': 'form-group',
 		}).inject(this.container));
 
-		const c = new Element('div', {
-			'class': 'row',
-		}).inject(this.container);
-
-		new Element('div', {
-			'class': 'col-sm-10',
-		}).inject(c);
 		new Element('button', {
-			'class': 'btn btn-default',
+			'class': 'btn btn-default pull-right',
 			type: 'submit',
 			html: 'Save',
-		}).inject(new Element('div', {
-			'class': 'col-sm-1',
-		}).inject(c));
+		}).inject(this.container);
 		new Element('button', {
-			'class': 'btn btn-default',
+			'class': 'btn btn-default pull-right',
 			type: 'button',
 			html: 'Cancel',
-		}).inject(new Element('div', {
-			'class': 'col-sm-1',
-		}).inject(c)).addEvent('click', this.show.bind(this));
+		}).inject(this.container).addEvent('click', this.show.bind(this));
 
 		this.options.button.addEvent('click', this.show.bind(this));
 		this.container.addEvent('submit', this.submit.bind(this));
 	},
 	enable: function() {
+		this.enabled = true;
 		this.options.container.removeClass('disabled');
 		this.options.container.addClass('active');
 	},
 	disable: function() {
+		this.enabled = false;
 		this.options.container.removeClass('active');
 		this.options.container.addClass('disabled');
 	},
 	show: function() {
+		if(!this.enabled) return;
+
 		if(!this.shown) {
 			this.options.where.set('html', '');
 			this.elem.set('value', this.options.markdown.get('html'));
@@ -73,15 +67,16 @@ const Edit = new Class({
 	},
 	submit: function(e) {
 		e.stop();
+
 		console.log('saving page');
 		new Request({
-			url: '/pages/' + this.options.site + '/' + page(),
+			url: '/pages/' + this.options.site + '/' + this.options.page(),
 			onSuccess: function() {
 				this.options.markdown.set('html', this.elem.get('value'));
 				this.options.where.set('html', this.md.makeHtml(this.elem.get('value')));
 			}.bind(this),
 		}).post({
-			value: this.elem.get('value'),
+			f: this.elem.get('value'),
 		});
 	},
 });
