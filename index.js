@@ -15,8 +15,6 @@ const config = require('config')(require('./config.js'));
 
 const app = new koa();
 
-var server;
-
 app.use(logger());
 app.use(conditional());
 app.use(etag());
@@ -24,11 +22,5 @@ app.use(compress());
 app.use(serve('public'));
 
 config.onReady(function() {
-	server = app.listen(config.port);
-});
-
-config.onChange(function() {
-	server.close(function() {
-		server = app.listen(config.port);
-	});
+	app.listen(config.port);
 });
