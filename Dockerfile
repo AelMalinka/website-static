@@ -9,7 +9,6 @@ WORKDIR /code
 RUN npm install
 VOLUME /code
 
-ENV	CONFIG_HOST="localhost" \
-	CONFIG_PORT="8081"
+ENV	PORT="8080"
 
 CMD [ "npm", "start" ]

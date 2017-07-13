@@ -13,20 +13,9 @@ spec:
         spec:
             containers:
                 - name: static
-                  image: us.gcr.io/entropy-development/static:0.1.0
+                  image: us.gcr.io/entropy-development/static:0.2.0
                   ports:
                       - containerPort: 8080
-                  env:
-                      - name: CONFIG_HOST
-                        valueFrom:
-                            configMapKeyRef:
-                                name: website-config
-                                key: config.host
-                      - name: CONFIG_PORT
-                        valueFrom:
-                            configMapKeyRef:
-                                name: website-config
-                                key: config.port
 ---
 apiVersion: v1
 kind: Service

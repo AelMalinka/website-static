@@ -10,8 +10,7 @@ const serve = require('koa-static');
 const etag = require('koa-etag');
 const conditional = require('koa-conditional-get');
 const compress = require('koa-compress');
-
-const config = require('config')(require('./config.js'));
+const config = require('./config.js');
 
 const app = new koa();
 
@@ -19,8 +18,15 @@ app.use(logger());
 app.use(conditional());
 app.use(etag());
 app.use(compress());
+
+app.use(async (ctx, next) => {
+	if(ctx.url.startsWith('/' + config.name))
+		ctx.url = ctx.url.replace('/' + config.name, '');
+
+	await next();
+});
+
 app.use(serve('public'));
 
-config.onReady(function() {
-	app.listen(config.port);
-});
+
+app.listen(config.port);
