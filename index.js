@@ -15,9 +15,9 @@ const config = require('./config.js');
 const app = new koa();
 
 app.use(logger());
+app.use(compress());
 app.use(conditional());
 app.use(etag());
-app.use(compress());
 
 app.use(async (ctx, next) => {
 	if(ctx.url.startsWith('/' + config.name))
