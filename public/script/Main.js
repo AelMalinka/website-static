@@ -41,26 +41,4 @@ window.addEvent('domready', function() {
 	});
 
 	nav.get();
-
-	const edit = new Edit({
-		where: $('main'),
-		container: $('edit-container'),
-		button: $('edit'),
-		site: 'default',
-		page: page,
-		markdown: $('markdown'),
-		height: 20,
-	});
-
-	const user = new User({
-		where: $('login'),
-		onLogin: function() {
-			edit.enable();
-		},
-		onLogout: function() {
-			edit.disable();
-		},
-	});
-
-	user.show();
 });
