@@ -4,5 +4,5 @@
 
 module.exports = {
 	name: 'static',
-	port: process.env.PORT || 8080,
+	port: process.env.PORT || 8082,
 };
