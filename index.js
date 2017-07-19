@@ -9,13 +9,11 @@ const logger = require('koa-logger');
 const serve = require('koa-static');
 const etag = require('koa-etag');
 const conditional = require('koa-conditional-get');
-const compress = require('koa-compress');
 const config = require('./config.js');
 
 const app = new koa();
 
 app.use(logger());
-app.use(compress());
 app.use(conditional());
 app.use(etag());
 
