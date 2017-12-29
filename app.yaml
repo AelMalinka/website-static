@@ -13,7 +13,7 @@ spec:
         spec:
             containers:
             - name: static
-              image: us.gcr.io/entropy-development/static:0.2.0
+              image: aelmalinka/static
               ports:
               - containerPort: 8080
               env:
