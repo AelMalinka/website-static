@@ -5,6 +5,11 @@
 const Page = new Class({
 	Implements: [Options],
 	options: {
+		classes: {
+			active: 'active',
+			element: 'nav-link',
+			container: 'nav-item',
+		}
 	},
 	initialize: function(options) {
 		this.setOptions(options);
@@ -15,7 +20,9 @@ const Page = new Class({
 			href: this.options.page,
 			html: this.options.page,
 		});
+		this.element.addClass(this.options.classes.element);
 		this.container = new Element('li');
+		this.container.addClass(this.options.classes.container);
 		this.element.inject(this.container);
 	},
 	get: function(id) {
@@ -33,10 +40,10 @@ const Page = new Class({
 		}).get();
 	},
 	clear: function() {
-		this.container.removeClass('active');
+		this.container.removeClass(this.options.classes.active);
 	},
 	active: function() {
-		this.container.addClass('active');
+		this.container.addClass(this.options.classes.active);
 	},
 	inject: function(where) {
 		this.container.inject(where);
