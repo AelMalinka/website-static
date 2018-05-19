@@ -60,22 +60,20 @@ const Modal = new Class({
 			'class': 'modal-header'
 		});
 
+		this.titleElement = new Element('h4', {
+			'class': 'modal-title',
+			html: this.options.Title,
+		}).inject(this.header);
+
 		new Element('span', {
-			'aria-hidden': true,
-			html: '&times;',
-		}).inject(new Element('span', {
 			'class': 'sr-only',
 			html: 'Close',
 		}).inject(new Element('button', {
 			'class': 'close',
 			type: 'button',
 			'data-dismiss': 'modal',
-		}).inject(this.header)), 'after');
-
-		this.titleElement = new Element('h4', {
-			'class': 'modal-title',
-			html: this.options.Title,
-		}).inject(this.header);
+			html: '&times;'
+		}).inject(this.header));
 	},
 	Title: {
 		get: function() {

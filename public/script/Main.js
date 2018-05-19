@@ -41,4 +41,28 @@ window.addEvent('domready', function() {
 	});
 
 	nav.get();
+
+	const edit = new Edit({
+		where: $('main'),
+		container: $('edit-container'),
+		button: $('edit'),
+		site: 'default',
+		page: page,
+		markdown: $('markdown'),
+		height: 20,
+	});
+
+	const user = new User({
+		where: $('login'),
+		onLogin: function() {
+			// 2018-05-18 AMR TODO: make use of session
+			// 2018-05-18 AMR TODO: fixup for new users backend
+			//edit.enable();
+		},
+		onLogout: function() {
+			edit.disable();
+		},
+	});
+
+	user.show();
 });

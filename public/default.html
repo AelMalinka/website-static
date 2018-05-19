@@ -4,6 +4,7 @@
 		<title>Entropy Development</title>
 		<meta charset='utf-8'>
 		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel='stylesheet' href='https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css'>
 		<link rel='stylesheet' href='style/default.css'>
 		<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 		<script src='style/bootstrap.min.js'></script>
@@ -12,12 +13,23 @@
 		<script src='https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.min.js'></script>
 		<script src='static/script/Page.js'></script>
 		<script src='static/script/Navigation.js'></script>
+		<script src='static/script/Modal.js'></script>
+		<script src='static/script/User.js'></script>
+		<script src='static/script/Edit.js'></script>
 		<script src='static/script/Main.js'></script>
 	</head>
 	<body>
 		<nav class='navbar navbar-expand-sm bg-dark navbar-dark'>
 			<a id='home' class='nav-brand' href='/'>Entropy Development</a>
-			<ul id='menu' class='navbar-nav'>
+			<div class='navbar-collapse collapse'>
+				<ul id='menu' class='navbar-nav'>
+				</ul>
+			</div>
+			<ul class='navbar-nav'>
+				<li id='edit-container' class='nav-item disabled'>
+					<a id='edit' class='nav-link'>Edit &#x1F4BE;</a>
+				</li>
+				<li id='login' class='nav-item active'></li>
 			</ul>
 		</nav>
 		<div id='main' class='container'>

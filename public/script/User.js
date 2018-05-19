@@ -4,19 +4,15 @@
 
 // 2017-04-28 AMR NOTE: Login/Logout buttons
 const Login = new Element('a', {
-	html: 'Login ',
+	html: 'Login \u{1F464}',
+	'class': 'nav-link',
 	'data-toggle': 'modal',
-	'data-target': '#login-modal'
+	'data-target': '#login-modal',
 });
 const Logout = new Element('a', {
-	html: 'Logout '
+	html: 'Logout \u{1F464}',
+	'class': 'nav-link',
 });
-new Element('span', {
-	'class': 'glyphicon glyphicon-user',
-}).inject(Login);
-new Element('span', {
-	'class': 'glyphicon glyphicon-user',
-}).inject(Logout);
 
 const User = new Class({
 	Implements: [Options, Events],
@@ -39,8 +35,6 @@ const User = new Class({
 		this.addEvent('logout', this.show.bind(this));
 	},
 	build: function() {
-		const self = this;
-
 		this.modal = new Modal({
 			id: 'login-modal',
 			Title: 'Login',
@@ -48,18 +42,24 @@ const User = new Class({
 		this.modal.container.addEvent('submit', this.login.bind(this));
 
 		// 2017-04-28 AMR NOTE: modal body
-		this.form = new Element('input', {
-			id: 'user',
-			'class': 'form-control',
+		this.name = new Element('input', {
+			id: 'name',
 			type: 'text',
-			placeholder: 'Username',
+			'class': 'form-control',
 		}).inject(new Element('label', {
 			'class': 'sr-only',
 			'for': 'user',
 			html: 'Username',
-		}).inject(new Element('div', {
-			'class': 'form-group',
-		}).inject(this.modal.body)), 'after');
+		})).inject(this.modal.body);
+		this.pass = new Element('input', {
+			id: 'pass',
+			type: 'password',
+			'class': 'form-control',
+		}).inject(new Element('label', {
+			'class': 'sr-only',
+			'for': 'pass',
+			html: 'Password',
+		})).inject(this.modal.body);
 
 		// 2017-04-28 AMR NOTE: modal footer
 		new Element('button', {
@@ -85,29 +85,32 @@ const User = new Class({
 	login: function(e) {
 		e.stop();
 
-		const user = this.form.get('value');
-		this.form.set('value', '');
+		const user = this.name.get('value');
+		const pass = this.pass.get('value');
+
+		this.name.set('value', '');
+		this.pass.set('value', '');
 
 		console.log('trying to log in as ' + user);
 
-		new Request.JSON({
-			url: '/user/login',
-			data: 'user=' + user,
-			onSuccess: function(res) {
-				if(res.redirect !== undefined) {
-					document.location = res.redirect;
-				} else if(res.name !== user) {
-					this.logged = false;
-					this.fireEvent('logout');
-				} else {
-					this.user = res;
-					this.logged = true;
-					this.fireEvent('login');
-				}
+		new Request({
+			url: '/users/login',
+			data: {
+				name: user,
+				pass: pass,
+			},
+			onSuccess: function(text) {
+				this.user = {
+					name: user,
+					sess: text,
+				};
+
+				this.logged = true;
+				this.fireEvent('login');
 
 				this.modal.hide();
 			}.bind(this),
-			onFailure: function(e) {
+			onFailure: function() {
 				this.logged = false;
 				this.fireEvent('logout');
 
@@ -121,8 +124,10 @@ const User = new Class({
 		console.log('trying to logout');
 
 		new Request({
-			url: '/user/logout',
-			data: 'user=' + this.user.name,
+			url: '/users/logout',
+			data: {
+				name: this.user.name,
+			},
 			onSuccess: function(res) {
 				delete this.user;
 
